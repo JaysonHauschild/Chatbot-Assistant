@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment secrets — never commit real .env files
+.env
+server/.env
+client/.env
+*.env.local
+server/data/rollback/system_prompt/*.json
+
+# Production build output
+client/dist/
+client/dist-ssr/
+docs/site/dist/
+
+# Logs
+server/logs/*.jsonl
+server/logs/*.md
+*.log
+npm-debug.log*
+test-results/
+playwright-report/
+
+# OS / editor artifacts
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.sw?
+
+# Persistent Gemini email alert cooldown
+server/data/gemini-usage-alert.json*
+
+# Persistent dashboard conversation archive
+server/data/archived-conversations.jsonl
+
+# Staff-only conversation review metadata
+server/data/conversation-reviews.jsonl

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>OKSBDC Widget Touch Test</title>
+    <link rel="icon" href="/favicon.svg">
+    <link rel="stylesheet" href="./test.css">
+  </head>
+  <body>
+    <header class="test-header">
+      <div class="test-heading">
+        <img src="/chatbot-logo.png" width="40" height="40" alt="OKSBDC">
+        <h1>Widget touch test</h1>
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <dl class="test-status">
+        <div><dt>Widget</dt><dd id="widget-state">Loading</dd></div>
+        <div><dt>Taps</dt><dd id="tap-total">0</dd></div>
+        <div><dt>Scroll</dt><dd><span id="scroll-position">0</span> px</dd></div>
+      </dl>
+      <div class="test-options">
+        <label><input id="show-bounds" type="checkbox"> Show iframe bounds</label>
+        <output id="last-tap" aria-live="polite">No taps yet</output>
+      </div>
+    </header>
+    <main>
+      <section class="test-section" aria-labelledby="upper-title">
+        <h2 id="upper-title">Upper targets</h2>
+        <div class="target-grid" data-target-group="Upper"></div>
+      </section>
+      <section class="test-section" aria-labelledby="middle-title">
+        <h2 id="middle-title">Middle targets</h2>
+        <div class="target-grid" data-target-group="Middle"></div>
+      </section>
+      <section class="test-section" aria-labelledby="lower-title">
+        <h2 id="lower-title">Lower targets</h2>
+        <div class="target-grid" data-target-group="Lower"></div>
+      </section>
+      <p class="page-end">End of page</p>
+    </main>
+    <button type="button" class="corner-target corner-left" data-target="Bottom left">Left <span>0</span></button>
+    <button type="button" class="corner-target corner-right" data-target="Bottom right">Right <span>0</span></button>
+    <div id="iframe-bounds" class="bounds bounds-full" hidden aria-hidden="true"><span>Iframe</span></div>
+    <div id="active-bounds" class="bounds bounds-active" hidden aria-hidden="true"><span>Active area</span></div>
+    <div id="widget-embed-mount"></div>
+    <script type="module" src="./test.js"></script>
+  </body>
+</html>

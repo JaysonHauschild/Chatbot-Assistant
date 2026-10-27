@@ -1,0 +1,2 @@
+.unsaved-changes-indicator { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 4px 9px; border: 1px solid var(--border-soft); border-radius: 4px; background: var(--surface-strong); color: var(--ink); font: 600 .8rem/1.4 var(--font-ui); }
+.unsaved-changes-indicator::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--brand-red); }

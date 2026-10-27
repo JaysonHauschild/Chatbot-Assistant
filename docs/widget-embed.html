@@ -1,0 +1,98 @@
+<!-- Replace the existing chatbot embed on the host website with this block. -->
+<style>
+  .oksbdc-chatbot-embed {
+    position: fixed;
+    /* The widget measures the iframe viewport, not the host page. Keep this
+       wider than its 540px phone breakpoint so larger screens use the
+       bottom-right layout. The widget supplies its own inner corner gap. */
+    right: 0;
+    bottom: 0;
+    top: auto;
+    left: auto;
+    width: 560px;
+    max-width: 100vw;
+    height: 620px;
+    max-height: 100dvh;
+    z-index: 999999;
+    pointer-events: none;
+    /* Promote this fixed element to its own GPU-composited layer. Without
+       this, mobile Safari/Chrome can visually lag a position:fixed element
+       behind the viewport during an active scroll gesture (it briefly clips
+       off the bottom edge, then snaps into place once scrolling settles) -
+       most noticeable while the address-bar toolbar is animating away. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .oksbdc-chatbot-embed iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    pointer-events: auto;
+    /* Stay noninteractive until the widget reports its visible bounds. */
+    visibility: hidden;
+    clip-path: inset(100%);
+  }
+
+  @media (max-width: 540px) {
+    .oksbdc-chatbot-embed {
+      /* Give the box the full safe-area-bounded viewport instead of a fixed
+         620px pinned to the bottom. The widget itself only occupies a small
+         corner bubble when closed and centers its panel within this box when
+         open (see .widget-shell in the widget's own CSS) - it needs the room
+         to do that without being clipped by the notch/home indicator or
+         squeezed into a short bottom strip. The script below clips the
+         closed iframe on the host page so its empty area cannot intercept
+         clicks, taps, or scrolling. */
+      top: env(safe-area-inset-top, 0px);
+      left: 0;
+      right: 0;
+      bottom: env(safe-area-inset-bottom, 0px);
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: none;
+    }
+  }
+</style>
+<div class="oksbdc-chatbot-embed">
+  <iframe title="OKSBDC Chatbot" src="https://apps.oksbdc.org/chatbot/"></iframe>
+</div>
+<script>
+  (() => {
+    const container = document.currentScript.previousElementSibling;
+    // Host page sections with transforms, filters, or containment can make
+    // fixed descendants follow the section instead of the viewport.
+    // Mount at the body level so the widget stays in the screen corner.
+    document.body.appendChild(container);
+    const iframe = container.querySelector('iframe');
+    const widgetOrigin = new URL(iframe.src, document.baseURI).origin;
+
+    window.addEventListener('message', (event) => {
+      if (event.source !== iframe.contentWindow || event.origin !== widgetOrigin) return;
+      const data = event.data;
+      if (data?.type !== 'oksbdc:widget-layout' || typeof data.isOpen !== 'boolean') return;
+      const values = ['top', 'right', 'bottom', 'left'].map((side) => data.insets?.[side]);
+      if (!values.every((value) => Number.isFinite(value) && value >= 0)) return;
+      const [top, right, bottom, left] = values;
+      if (top + bottom >= iframe.clientHeight || left + right >= iframe.clientWidth) return;
+
+      // Clipping changes the iframe's hit area without changing its viewport
+      // or accidentally switching the desktop widget to its phone layout.
+      iframe.style.clipPath = data.isOpen ? 'none' : `inset(${values.map((value) => `${value}px`).join(' ')})`;
+      iframe.style.visibility = 'visible';
+    });
+
+    const requestLayout = () => {
+      iframe.contentWindow.postMessage({ type: 'oksbdc:request-widget-layout' }, widgetOrigin);
+    };
+    iframe.addEventListener('load', () => {
+      iframe.style.visibility = 'hidden';
+      requestLayout();
+    });
+  })();
+</script>

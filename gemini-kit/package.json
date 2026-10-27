@@ -1,0 +1,49 @@
+{
+  "name": "@jaysonh/gemini-kit",
+  "version": "0.1.0",
+  "description": "A small, reusable TypeScript toolkit for adding Gemini text, chat, streaming, structured output, and embedding features.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "npm run build && tsc --noEmit",
+    "test": "npm run build && node --test",
+    "check": "npm run typecheck && npm test && npm run pack:check",
+    "pack:check": "npm pack --dry-run",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "gemini",
+    "google-genai",
+    "llm",
+    "embeddings",
+    "chatbot"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@google/genai": "^2.11.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "typescript": "^7.0.2"
+  }
+}

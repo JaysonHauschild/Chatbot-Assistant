@@ -1,0 +1,40 @@
+{
+  "name": "server-kit",
+  "version": "0.2.0",
+  "description": "Dependency-free Node.js infrastructure for authentication, storage, logging, server lifecycle, retention, and notification cooldowns.",
+  "main": "./index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./index.js",
+    "./account-store": "./src/account-store.js",
+    "./auth": "./src/auth.js",
+    "./documents": "./src/documents.js",
+    "./env": "./src/env.js",
+    "./http": "./src/http.js",
+    "./jsonl": "./src/jsonl.js",
+    "./redaction": "./src/redaction.js",
+    "./request-security": "./src/request-security.js",
+    "./validation": "./src/validation.js",
+    "./work-tracker": "./src/work-tracker.js",
+    "./graceful-shutdown": "./src/graceful-shutdown.js",
+    "./log-retention": "./src/log-retention.js",
+    "./notifications": "./src/notifications.js"
+  },
+  "files": [
+    "index.js",
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check index.js && node --check src/*.js && npm test",
+    "pack:check": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "sideEffects": false
+}

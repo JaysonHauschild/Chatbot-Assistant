@@ -1,0 +1,47 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Express API for Gemini chatbot widget",
+  "main": "index.js",
+  "scripts": {
+    "rules:backfill-display-names": "node scripts/backfill-rule-display-names.js",
+    "dev": "nodemon --ignore logs/ --ignore data/ index.js",
+    "start": "node index.js",
+    "crawl": "node scripts/crawl.js",
+    "crawl:test": "node scripts/crawl.js --max-pages 10",
+    "knowledge:add-docs": "node scripts/add-documents.js",
+    "rag:readable": "node scripts/export-readable-store.js",
+    "test:conversations": "node scripts/conversation-smoke.js",
+    "test": "node --test tests/*.test.js",
+    "logs:evaluate": "node scripts/evaluate-log-responses.js",
+    "dashboard:data:flush": "node scripts/flush-dashboard-data.js",
+    "test:load": "node scripts/load-test-chat.js",
+    "dashboard:create-user": "node scripts/create-dashboard-account.js",
+    "test:load:users": "CHAT_LOAD_TEST_MODE=users node scripts/load-test-chat.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@jaysonh/gemini-kit": "file:../gemini-kit",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.2.0",
+    "ioredis": "^5.11.1",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.0.1",
+    "rules-kit": "file:../rules-kit",
+    "server-kit": "file:../server-kit",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "ioredis-mock": "^8.13.1",
+    "nodemon": "^3.1.14"
+  }
+}

@@ -1,0 +1,23 @@
+.dashboard-administration { display: grid; gap: 20px; min-width: 0; padding-block: 18px; color: var(--ink); }
+.dashboard-administration h2, .dashboard-administration h3, .dashboard-administration p { margin: 0; }
+.administration-create-form { display: flex; flex-wrap: wrap; align-items: end; gap: 14px; padding: 18px; border: 1px solid var(--border-soft); border-radius: 4px; background: var(--surface); }
+.administration-create-form label { display: grid; gap: 6px; font-size: .85rem; }
+.dashboard-administration input, .dashboard-administration select { min-width: 0; max-width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid var(--border-soft); border-radius: 4px; background: var(--surface-strong); color: var(--ink); font: inherit; }
+.administration-credentials { display: grid; gap: 12px; border: 1px solid var(--border-soft); border-left: 3px solid var(--brand-red); border-radius: 4px; padding: 18px; background: var(--surface); overflow-wrap: anywhere; }
+.administration-credentials code { user-select: all; }
+.administration-credentials button { justify-self: start; }
+.dashboard-administration table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.dashboard-administration td, .dashboard-administration th { padding: 12px; border-bottom: 1px solid var(--border-soft); text-align: left; }
+.dashboard-administration thead th { background: var(--surface-strong); }
+.administration-email { display: block; color: var(--ink-soft); }
+.administration-user-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.administration-delete { color: var(--brand-red); }
+.administration-audit { display: grid; gap: 16px; min-width: 0; border-top: 1px solid var(--border-soft); padding-top: 24px; }
+.administration-audit-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.administration-audit-controls label { display: grid; gap: 6px; font-size: .85rem; }
+.administration-audit summary { cursor: pointer; white-space: nowrap; }
+.administration-audit .analytics-table-scroll { max-height: 480px; }
+.administration-audit thead th { position: sticky; top: 0; z-index: 1; }
+.administration-audit pre { white-space: pre-wrap; overflow-wrap: anywhere; min-width: 200px; max-width: 460px; max-height: 320px; overflow: auto; font-size: .8rem; }
+.dashboard-administration :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+@media (max-width: 540px) { .administration-create-form { display: grid; grid-template-columns: minmax(0, 1fr); } }

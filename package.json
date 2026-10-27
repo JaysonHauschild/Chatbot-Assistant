@@ -1,0 +1,29 @@
+{
+  "name": "oksbdc-chatbot",
+  "version": "1.0.0",
+  "description": "Floating chatbot widget with Vite + Express + Gemini",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client -- --host 0.0.0.0\"",
+    "build": "npm run build --prefix client",
+    "start": "npm run start --prefix server",
+    "dashboard:data:flush": "node server/scripts/flush-dashboard-data.js",
+    "docs:build": "node docs/site/build.mjs",
+    "docs:serve": "node docs/site/serve.mjs",
+    "test:chat-recovery": "npm run test:chat-recovery:unit && npm run test:chat-recovery:browser",
+    "test:chat-recovery:unit": "node --test server/tests/chat-models.test.js server/tests/chat-generation-recovery.test.js client/src/utils/chatRecovery.test.js",
+    "test:chat-recovery:browser": "playwright test tests/browser/chat-recovery.spec.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "fontawesome": "^5.6.3",
+    "react-fontawesome": "^1.7.1",
+    "shell-quote": "^1.8.4"
+  }
+}

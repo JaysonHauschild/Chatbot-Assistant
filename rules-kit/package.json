@@ -1,0 +1,21 @@
+{
+  "name": "rules-kit",
+  "version": "0.1.0",
+  "description": "Dependency-free local rule matching with block/respond/replace actions, exclusions, priorities, language, and topic context.",
+  "main": "./index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./index.js",
+    "./compiler": "./src/compiler.js",
+    "./language": "./src/language.js"
+  },
+  "files": ["index.js", "src", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check index.js && npm test",
+    "pack:check": "npm pack --dry-run"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "sideEffects": false
+}

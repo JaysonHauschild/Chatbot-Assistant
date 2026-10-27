@@ -1,0 +1,94 @@
+const { test, expect } = require('@playwright/test');
+const { buildMonthlyAnalytics } = require('../../server/lib/monthly-analytics');
+const adminToken = `${Buffer.from('{"alg":"HS256"}').toString('base64url')}.${Buffer.from('{"sub":"self","role":"admin"}').toString('base64url')}.test`;
+
+test('analytics subtabs separate reports, preserve selections, and share filters and export', async ({ page }) => {
+  const requests = [];
+  await page.addInitScript(() => sessionStorage.setItem('dashboard_token', 'test-token'));
+  await page.route('**/api/**', (route) => {
+    const url = new URL(route.request().url());
+    if (!url.pathname.endsWith('/monthly-analytics')) return route.fulfill({ json: {} });
+    requests.push(Object.fromEntries(url.searchParams));
+    return route.fulfill({ json: buildMonthlyAnalytics([], Object.fromEntries(url.searchParams)) });
+  });
+  await page.goto('./dashboard');
+  await page.getByRole('tab', { name: 'Monthly analytics', exact: true }).click();
+  await page.locator('.dashboard-sidebar').getByRole('link', { name: 'Usage & referrals', exact: true }).click();
+  const tabs = page.getByRole('tablist', { name: 'Monthly analytics areas' });
+  const usage = tabs.getByRole('tab', { name: 'Usage & referrals', exact: true });
+  const quality = tabs.getByRole('tab', { name: 'Answer quality', exact: true });
+  const topics = tabs.getByRole('tab', { name: 'Topics & rules', exact: true });
+  await expect(usage).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('region', { name: 'Monthly usage table', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Answer quality and follow-up', exact: true })).toBeHidden();
+  await page.getByLabel('From', { exact: true }).fill('2026-01');
+  await page.getByLabel('Through', { exact: true }).fill('2026-02');
+  await page.getByRole('button', { name: 'Update report', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Export Excel (.xlsx)', exact: true })).toBeEnabled();
+  const requestCount = requests.length;
+  await usage.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(quality).toBeFocused();
+  await expect(quality).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('region', { name: 'Monthly feedback and replies table', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Monthly usage table', exact: true })).toBeHidden();
+  await page.keyboard.press('End');
+  await expect(topics).toBeFocused();
+  await page.getByRole('combobox', { name: 'Show details for', exact: true }).selectOption('2026-01');
+  await page.keyboard.press('Tab');
+  await usage.click();
+  await topics.click();
+  await expect(page.getByRole('combobox', { name: 'Show details for', exact: true })).toHaveValue('2026-01');
+  await expect(page.getByLabel('From', { exact: true })).toHaveValue('2026-01');
+  await expect(page.getByLabel('Through', { exact: true })).toHaveValue('2026-02');
+  expect(requests).toHaveLength(requestCount);
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export Excel (.xlsx)', exact: true }).click();
+  expect((await download).suggestedFilename()).toBe('monthly-analytics_2026-01_2026-02.xlsx');
+  await page.getByLabel('Through', { exact: true }).fill('2026-03');
+  await page.getByRole('button', { name: 'Update report', exact: true }).click();
+  await expect(page.getByRole('combobox', { name: 'Show details for', exact: true })).toHaveValue('all');
+  await expect(topics).toHaveAttribute('aria-selected', 'true');
+  expect(requests.at(-1)).toMatchObject({ startMonth: '2026-01', endMonth: '2026-03' });
+  await topics.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(usage).toBeFocused();
+  await page.keyboard.press('ArrowLeft');
+  await expect(topics).toBeFocused();
+  await page.keyboard.press('Home');
+  await expect(usage).toBeFocused();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: `/tmp/dashboard-subtabs-analytics-${page.viewportSize().width}.png`, fullPage: true });
+});
+
+test('administration separates access and audit history while preserving a user draft', async ({ page }) => {
+  await page.addInitScript((token) => sessionStorage.setItem('dashboard_token', token), adminToken);
+  await page.route('**/api/**', (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname.endsWith('/users')) return route.fulfill({ json: {
+      currentUserId: 'self', users: [{ id: 'self', username: 'admin', role: 'admin', active: true }],
+    } });
+    if (url.pathname.endsWith('/audit-log')) return route.fulfill({ json: { items: [], total: 0 } });
+    return route.fulfill({ json: {} });
+  });
+  await page.goto('./dashboard');
+  await page.getByRole('tab', { name: 'Administration', exact: true }).click();
+  await page.locator('.dashboard-sidebar').getByRole('link', { name: 'Users & access', exact: true }).click();
+  const tabs = page.getByRole('tablist', { name: 'Administration areas' });
+  const users = tabs.getByRole('tab', { name: 'Users & access', exact: true });
+  const audit = tabs.getByRole('tab', { name: 'Audit log', exact: true });
+  await expect(users).toHaveAttribute('aria-selected', 'true');
+  await page.getByLabel('Username', { exact: true }).fill('new.editor');
+  await page.getByRole('combobox', { name: 'Role', exact: true }).selectOption('dashboard');
+  page.once('dialog', (dialog) => dialog.accept());
+  await audit.click();
+  await expect(page.getByRole('region', { name: 'Dashboard audit log', exact: true })).toBeVisible();
+  await expect(page.getByRole('form', { name: 'Create dashboard user', exact: true })).toBeHidden();
+  await audit.focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(users).toBeFocused();
+  await expect(page.getByLabel('Username', { exact: true })).toHaveValue('new.editor');
+  await expect(page.getByRole('combobox', { name: 'Role', exact: true })).toHaveValue('dashboard');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: `/tmp/dashboard-subtabs-administration-${page.viewportSize().width}.png`, fullPage: true });
+});

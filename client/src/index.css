@@ -1,0 +1,81 @@
+:root {
+  --brand: #c8102e;
+  --brand-navy: #1b2a4a;
+  --brand-red: #c8102e;
+  --ink: #1b2a4a;
+  --ink-soft: #4a5a7a;
+  --paper: #ffffff;
+  --focus: #c8102e;
+  --surface: rgba(255, 255, 255, 0.98);
+  --surface-strong: linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(248, 249, 252, 0.98));
+  --border-soft: rgba(27, 42, 74, 0.18);
+  --assistant-bg: rgba(27, 42, 74, 0.07);
+  --input-bg: #ffffff;
+  --chip-bg: rgba(255, 255, 255, 0.9);
+  --code-bg: rgba(27, 42, 74, 0.08);
+  --table-border: rgba(27, 42, 74, 0.2);
+  --link: #c8102e;
+  --header-bg: #1b2a4a;
+  --header-ink: #ffffff;
+  --bg-gradient: #f0f2f5;
+  --elev-shadow: 0 16px 40px rgba(27, 42, 74, 0.22);
+  --font-display: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-ui: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme='dark'] {
+  --brand: #e8324a;
+  --brand-navy: #e9eef6;
+  --brand-red: #e8324a;
+  --ink: #e9eef6;
+  --ink-soft: #9aaac8;
+  --paper: #0e1525;
+  --focus: #e8324a;
+  --surface: rgba(15, 22, 40, 0.96);
+  --surface-strong: linear-gradient(160deg, rgba(15, 22, 40, 0.98), rgba(20, 30, 54, 0.96));
+  --border-soft: rgba(150, 170, 210, 0.24);
+  --assistant-bg: rgba(255, 255, 255, 0.06);
+  --input-bg: rgba(255, 255, 255, 0.06);
+  --chip-bg: rgba(255, 255, 255, 0.08);
+  --code-bg: rgba(255, 255, 255, 0.08);
+  --table-border: rgba(150, 170, 210, 0.3);
+  --link: #f08090;
+  --header-bg: #0b1020;
+  --header-ink: #e9eef6;
+  --bg-gradient: #0b1020;
+  --elev-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--bg-gradient);
+}
+
+:root[data-embedded],
+:root[data-embedded] body,
+:root[data-embedded] #root {
+  background: transparent !important;
+  min-height: 0;
+  /* These rules affect targets inside this document only. The host embed
+     must clip the iframe itself to pass clicks/taps through to its page. */
+  pointer-events: none;
+}
+
+:root[data-embedded] .widget-shell {
+  pointer-events: auto;
+}
+
+#root {
+  min-height: 100vh;
+}

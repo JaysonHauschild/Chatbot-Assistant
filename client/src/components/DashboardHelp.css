@@ -1,0 +1,8 @@
+.dashboard-help-anchor { display: inline-flex; vertical-align: middle; margin-inline-start: 6px; }
+.dashboard-help-button { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border: 1px solid var(--border-soft, #d4dce3); border-radius: 50%; background: var(--surface, #fff); color: var(--ink-soft, #4d5964); font-size: 13px; cursor: pointer; flex-shrink: 0; }
+.dashboard-help-button:hover, .dashboard-help-button:focus-visible { color: var(--brand-red, #c8102e); border-color: var(--brand-red, #c8102e); background: var(--surface-strong, #f3f6f8); }
+.dashboard-help-button:focus-visible { outline: 2px solid var(--focus, #3478bc); outline-offset: 3px; }
+.dashboard-help-tooltip { position: fixed; z-index: 10000; box-sizing: border-box; padding: 14px 16px; border: 1px solid var(--help-border); border-top: 3px solid #c8102e; border-radius: 8px; background: var(--help-surface); color: var(--help-ink); box-shadow: 0 8px 28px #0003; font: 400 13px/1.65 system-ui, sans-serif; text-align: left; overflow-y: auto; scrollbar-width: thin; overflow-wrap: anywhere; }
+.dashboard-help-tooltip[hidden] { display: none; }
+.dashboard-help-tooltip p { margin: 0; }
+.dashboard-help-tooltip p + p { margin-top: 10px; }
